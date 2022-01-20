@@ -107,6 +107,7 @@ try:
     telegramChatId = streamConfigTelegram['chat_ids']
     telegramBotToken = streamConfigTelegram['botfather_token']
     telegramCoinReport = streamConfigTelegram['enable_coin_report']
+    telegramBalanceReport = streamConfigTelegram['enable_balance_report']
     telegramMapReport = streamConfigTelegram['enable_map_report']
     telegramFormatImage = streamConfigTelegram['format_of_image']
     heroesClickedTelegram = streamConfigTelegram['heroes_clicked_telegram']
@@ -143,6 +144,9 @@ pyautogui.PAUSE = streamConfig['time_intervals']['interval_between_movements']
 pyautogui.FAILSAFE = False
 general_check_time = 1
 check_for_updates = 15
+
+maps_passed = 0
+balance_update = configTimeIntervals['update_balance']
 
 heroes_clicked = 0
 heroes_clicked_total = 0
@@ -264,6 +268,7 @@ try:
     afkapp_bcbot_72 = streamLang['afkapp_bcbot_72']
     afkapp_bcbot_73 = streamLang['afkapp_bcbot_73']
     afkapp_bcbot_74 = streamLang['afkapp_bcbot_74']
+    afkapp_bcbot_75 = streamLang['afkapp_bcbot_75']
 
 
 except FileNotFoundError:
@@ -1097,7 +1102,12 @@ def waitForImage(imgs, timeout=30, threshold=0.5, multiple=False):
 
 
 def clickNewMap():
-    logger(afkapp_bcbot_51, telegram=True, emoji='🗺️')
+    global maps_passed
+    maps_passed += 1
+
+    logger(afkapp_bcbot_51 + "\n\n{} ".format(maps_passed) + afkapp_bcbot_75,
+           telegram=True, emoji='🗺️')
+
     sleep(1, 2)
     sleep(2, 3)
     sendMapReport()
@@ -1165,12 +1175,14 @@ def checkThreshold():
 
 def bcbotsingle():
     print(Fore.YELLOW + afkapp_bcbot_59, Style.RESET_ALL)
+
     last = {
         "login": 0,
         "heroes": 0,
         "new_map": 0,
         "refresh_heroes": 0,
-        "check_updates": 0
+        "check_updates": 0,
+        "balance": 0
     }
 
     while True:
@@ -1217,6 +1229,10 @@ def bcbotsingle():
         if now - last["check_updates"] > check_for_updates * 60:
             last["check_updates"] = now
             checkUpdates()
+
+        if now - last["balance"] > balance_update * 60 and telegramBalanceReport == True:
+            last["balance"] = now
+            sendBCoinReport()
 
         checkLogout()
         sys.stdout.flush()
