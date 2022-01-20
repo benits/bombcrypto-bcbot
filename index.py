@@ -1097,7 +1097,7 @@ def waitForImage(imgs, timeout=30, threshold=0.5, multiple=False):
 
 
 def clickNewMap():
-    logger(afkapp_bcbot_51, emoji='🗺️')
+    logger(afkapp_bcbot_51, telegram=True, emoji='🗺️')
     sleep(1, 2)
     sleep(2, 3)
     sendMapReport()
