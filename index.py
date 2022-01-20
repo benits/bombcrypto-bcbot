@@ -1,3 +1,8 @@
+import requests
+import random
+import yaml
+import sys
+import time
 from cv2 import cv2
 from pyclick import HumanClicker
 from telegram import Update
@@ -16,18 +21,13 @@ from colorama import init, Fore, Style
 init()
 
 if os.name == 'posix':
-    print(Fore.YELLOW +'The multi account is only supported on Windows OS.\nO multi account é compatível somente com Windows.', Style.RESET_ALL)
-    input('Press Enter to continue without multi account...\n') 
+    print(Fore.YELLOW + 'The multi account is only supported on Windows OS.\nO multi account é compatível somente com Windows.', Style.RESET_ALL)
+    input('Press Enter to continue without multi account...\n')
 
 if os.name != 'nt' and os.name != 'posix':
-    print(Fore.RED +'Your operating system is unsupported.\nO seu sistema operacional não é compatível.', Style.RESET_ALL)
+    print(Fore.RED + 'Your operating system is unsupported.\nO seu sistema operacional não é compatível.', Style.RESET_ALL)
     os._exit(0)
 
-import time
-import sys
-import yaml
-import random
-import requests
 
 banner = ("""
 	
@@ -62,12 +62,14 @@ banner = ("""
 
 print(Fore.GREEN + banner + Style.RESET_ALL)
 
-Pause=[]
+Pause = []
+
 
 def readConfig():
     with open("./config/config.yaml", 'r', encoding='utf8') as s:
         stream = s.read()
     return yaml.safe_load(stream)
+
 
 try:
     streamConfig = readConfig()
@@ -78,19 +80,19 @@ try:
     chestData = streamConfig['value_chests']
     offsets = streamConfig['offsets']
 except FileNotFoundError:
-    print(Fore.RED +'Error: config.yaml file not found, rename EXAMPLE-config.yaml to config.yaml inside /config folder \nErro: Arquivo config.yaml não encontrado, renomear EXAMPLE-config.yaml para config.yaml dentro da pasta /config', Style.RESET_ALL)
+    print(Fore.RED + 'Error: config.yaml file not found, rename EXAMPLE-config.yaml to config.yaml inside /config folder \nErro: Arquivo config.yaml não encontrado, renomear EXAMPLE-config.yaml para config.yaml dentro da pasta /config', Style.RESET_ALL)
     exit()
 
 try:
     config_version_local = streamConfig['version']
 except KeyError:
-    print(Fore.RED +'Error: Please update the config.yaml file. \nErro: Por favor atualize o arquivo config.yaml', Style.RESET_ALL)
+    print(Fore.RED + 'Error: Please update the config.yaml file. \nErro: Por favor atualize o arquivo config.yaml', Style.RESET_ALL)
     exit()
 
-config_version = '1.7.6' #Required config version
+config_version = '1.7.6'  # Required config version
 
 if config_version > config_version_local:
-    print(Fore.RED +'Error: Please update the config.yaml file. \nErro: Por favor atualize o arquivo config.yaml', Style.RESET_ALL)
+    print(Fore.RED + 'Error: Please update the config.yaml file. \nErro: Por favor atualize o arquivo config.yaml', Style.RESET_ALL)
     exit()
 
 
@@ -113,14 +115,14 @@ except FileNotFoundError:
     print('Info: Telegram not configure, rename EXAMPLE-telegram.yaml to telegram.yaml')
     heroesClickedTelegram = True
 except KeyError:
-    print(Fore.RED +'Error: Please update the telegram.yaml file. \nErro: Por favor atualize o arquivo telegram.yaml', Style.RESET_ALL)
+    print(Fore.RED + 'Error: Please update the telegram.yaml file. \nErro: Por favor atualize o arquivo telegram.yaml', Style.RESET_ALL)
     exit()
 
 BtsHeraldIntegration = False
 try:
     stream = open("./config/services/btsherald.yaml", 'r', encoding='utf8')
     streamBtsHerald = yaml.safe_load(stream)
-    BtsHeraldIntegration= streamBtsHerald['herald_active']
+    BtsHeraldIntegration = streamBtsHerald['herald_active']
     bhid = streamBtsHerald['key-herald']
     herald_label = streamBtsHerald['label']
     stream.close()
@@ -166,10 +168,7 @@ error_img = cv2.imread('./images/targets/error.png')
 metamask_unlock_img = cv2.imread('./images/targets/unlock_metamask.png')
 metamask_cancel_button = cv2.imread(
     './images/targets/metamask_cancel_button.png')
-puzzle_img = cv2.imread('./images/targets/puzzle.png')
-piece = cv2.imread('./images/targets/piece.png')
 robot = cv2.imread('./images/targets/robot.png')
-slider = cv2.imread('./images/targets/slider.png')
 chest_button = cv2.imread('./images/targets/treasure_chest.png')
 coin_icon = cv2.imread('./images/targets/coin.png')
 maintenance_popup = cv2.imread('./images/targets/maintenance.png')
@@ -180,12 +179,14 @@ chest4 = cv2.imread('./images/targets/chest4.png')
 allwork = cv2.imread('./images/targets/all_work.png')
 allrest = cv2.imread('./images/targets/all_rest.png')
 common = cv2.imread('./images/targets/common.png')
-rest = cv2.imread('./images/targets/go_rest.png')
+rest = cv2.imread('./images/targets/go-rest.png')
+
 
 def readAfkAppLang():
     with open("./lang/"+afkapplang+".yaml", 'r', encoding='utf8') as l:
         stream = l.read()
     return yaml.safe_load(stream)
+
 
 try:
     streamLang = readAfkAppLang()
@@ -262,17 +263,20 @@ try:
     afkapp_bcbot_71 = streamLang['afkapp_bcbot_71']
     afkapp_bcbot_72 = streamLang['afkapp_bcbot_72']
     afkapp_bcbot_73 = streamLang['afkapp_bcbot_73']
+    afkapp_bcbot_74 = streamLang['afkapp_bcbot_74']
 
-    
+
 except FileNotFoundError:
     print('Error: The language file was not found.')
     print('Erro: O arquivo do idioma não foi encontrado.')
     exit()
 
-def dateFormatted(format = '%Y-%m-%d %H:%M:%S'):
-  datetime = time.localtime()
-  formatted = time.strftime(format, datetime)
-  return formatted
+
+def dateFormatted(format='%Y-%m-%d %H:%M:%S'):
+    datetime = time.localtime()
+    formatted = time.strftime(format, datetime)
+    return formatted
+
 
 def logger(message, telegram=False, emoji=None):
     formatted_datetime = dateFormatted()
@@ -293,8 +297,10 @@ def logger(message, telegram=False, emoji=None):
         logger_file.close()
     return True
 
+
 def PauseStatus():
     return Pause
+
 
 def checkFileExist(filePath):
     try:
@@ -304,6 +310,7 @@ def checkFileExist(filePath):
         return False
     except IOError as e:
         return False
+
 
 # Initialize telegram
 updater = None
@@ -361,12 +368,12 @@ if telegramIntegration == True:
             update.message.reply_text('🔃 '+afkapp_bcbot_07)
             if sendallworkReport() == None:
                 update.message.reply_text('✔️ '+afkapp_bcbot_64)
-        
+
         def send_allrest(update: Update, context: CallbackContext) -> None:
             update.message.reply_text('🔃 '+afkapp_bcbot_07)
             if sendallrestReport() == None:
                 update.message.reply_text('✔️ '+afkapp_bcbot_64)
-        
+
         def send_pause(update: Update, context: CallbackContext) -> None:
             update.message.reply_text('🔃 '+afkapp_bcbot_07)
             if len(Pause) == 1:
@@ -380,8 +387,8 @@ if telegramIntegration == True:
             if len(Pause) == 0:
                 update.message.reply_text('⚠️ '+afkapp_bcbot_70)
             if len(Pause) == 1:
-                #time.sleep(0.25)
-                #Pause.remove(1)
+                # time.sleep(0.25)
+                # Pause.remove(1)
                 #
                 update.message.reply_text('💡 '+afkapp_bcbot_65)
                 #update.message.reply_text('✔️ '+afkapp_bcbot_67)
@@ -401,7 +408,7 @@ if telegramIntegration == True:
         def send_stop(update: Update, context: CallbackContext) -> None:
             logger(afkapp_bcbot_14, telegram=True, emoji='🛑')
             os._exit(0)
-               
+
         commands = [
             ['print', send_print],
             ['id', send_id],
@@ -440,6 +447,7 @@ def sendTelegramMessage(message):
     except:
         #logger(afkapp_bcbot_16, emoji='📄')
         return
+
 
 def sendTelegramPrint():
     if telegramIntegration == False:
@@ -585,13 +593,14 @@ def sendMapReport():
     logger(afkapp_bcbot_22, telegram=True, emoji='📄')
     return True
 
+
 def sendallworkReport():
     if telegramIntegration == False:
         return
     if(len(telegramChatId) <= 0):
         return
     if currentScreen() == "main":
-            time.sleep(2)
+        time.sleep(2)
     elif currentScreen() == "character":
         if clickButton(x_button_img):
             time.sleep(2)
@@ -600,8 +609,8 @@ def sendallworkReport():
             time.sleep(2)
     else:
         return
-    
-    clickButton(hero_img)    
+
+    clickButton(hero_img)
     waitForImage(home_img)
     clickButton(allwork)
     clickButton(x_button_img)
@@ -610,13 +619,14 @@ def sendallworkReport():
     clickButton(x_button_img)
     logger('All working report sent', telegram=True, emoji='📄')
 
+
 def sendallrestReport():
     if telegramIntegration == False:
         return
     if(len(telegramChatId) <= 0):
         return
     if currentScreen() == "main":
-            time.sleep(2)
+        time.sleep(2)
     elif currentScreen() == "character":
         if clickButton(x_button_img):
             time.sleep(2)
@@ -625,20 +635,23 @@ def sendallrestReport():
             time.sleep(2)
     else:
         return
-    
-    clickButton(hero_img)    
+
+    clickButton(hero_img)
     waitForImage(home_img)
     clickButton(allrest)
     clickButton(x_button_img)
     clickButton(teasureHunt_icon_img)
-    sleep(5, 15)    
+    sleep(5, 15)
     clickButton(x_button_img)
     logger('All resting report sent', telegram=True, emoji='📄')
 
-#INTEGRATION WITH BTS HERALD - GET A NOTIFICATION IF THE BOT STOPS | https://herald.btscenter.net
+# INTEGRATION WITH BTS HERALD - GET A NOTIFICATION IF THE BOT STOPS | https://herald.btscenter.net
+
+
 def herald():
     if BtsHeraldIntegration == True and bhid != '':
-        herald = requests.get('https://herald.btscenter.net/monitor/?app=BCBOT&lang='+afkapplang+'&label='+herald_label+'&bhid='+bhid)
+        herald = requests.get('https://herald.btscenter.net/monitor/?app=BCBOT&lang=' +
+                              afkapplang+'&label='+herald_label+'&bhid='+bhid)
         #  --> You can DELETE the above line if you are not going to use the BTS Herald service: https://herald.btscenter.net
 
         #  --> If you use the BTS Herald service, we'll collect the following data:
@@ -652,7 +665,8 @@ def herald():
         #
         # You're using open source scripts, copying the work of other, not contributing anything, talking nonsense and no proof.
         # Envy kills, if you were creating something useful, wouldn't have time for this.
-        
+
+
 def clickButton(img, name=None, timeout=3, threshold=configThreshold['default']):
     if not name is None:
         pass
@@ -715,6 +729,7 @@ def positions(target, threshold=configThreshold['default'], base_img=None, retur
     else:
         return rectangles
 
+
 def show(rectangles=None, img=None):
 
     if img is None:
@@ -756,33 +771,8 @@ def scroll():
 
 
 def clickButtons():
-    buttons = positions(
-        go_work_img, threshold=configThreshold['go_to_work_btn'])
-    offset = offsets['work_button_all']
-
-    if buttons is False:
-        return
-
-    if streamConfig['debug'] is not False:
-        logger('%d buttons detected' % len(buttons), emoji='✔️')
-
-    for (x, y, w, h) in buttons:
-        offset_random = random.uniform(offset[0], offset[1])
-        # pyautogui.moveTo(x+(w/2),y+(h/2),1)
-        hc.move((int(x+offset_random), int(y+(h/2))), np.random.randint(1, 2))
-        pyautogui.click()
-        global heroes_clicked_total
-        global heroes_clicked
-        heroes_clicked_total = heroes_clicked_total + 1
-        # cv2.rectangle(sct_img, (x, y) , (x + w, y + h), (0,255,255),2)
-        if heroes_clicked > 15:
-            logger(afkapp_bcbot_23,
-                   telegram=True, emoji='⚠️')
-            return
-        sleep(1, 3)
-    logger('Clicking in %d heroes detected.' %
-           len(buttons), telegram=False, emoji='👆')
-    return len(buttons)
+    clickButton(allwork)
+    clickButton(x_button_img)
 
 
 def isWorking(bar, buttons):
@@ -908,6 +898,7 @@ def goToHeroes():
     if currentScreen() == "unknown" or currentScreen() == "login":
         checkLogout()
 
+
 def goToTreasureHunt():
     if currentScreen() == "main":
         clickButton(teasureHunt_icon_img)
@@ -916,7 +907,7 @@ def goToTreasureHunt():
         if clickButton(x_button_img):
             sleep(1, 3)
             clickButton(teasureHunt_icon_img)
-            #herald()
+            # herald()
     if currentScreen() == "unknown" or currentScreen() == "login":
         checkLogout()
 
@@ -1031,27 +1022,36 @@ def getMoreHeroes():
     next_refresh_heroes = random.uniform(
         configTimeIntervals['send_heroes_for_work'][0], configTimeIntervals['send_heroes_for_work'][1])
 
-    while(empty_scrolls_attempts > 0):
-        if streamConfig['select_heroes_mode'] == 'full':
-            buttonsClicked = clickFullBarButtons()
-            if buttonsClicked is not None:
-                heroes_clicked += buttonsClicked
-        elif streamConfig['select_heroes_mode'] == 'green':
-            buttonsClicked = clickGreenBarButtons()
-            if buttonsClicked is not None:
-                heroes_clicked += buttonsClicked
-        else:
-            buttonsClicked = clickButtons()
-            if buttonsClicked is not None:
-                heroes_clicked += buttonsClicked
+    if streamConfig['select_heroes_mode'] == 'all':
+        clickButtons()
 
-        if buttonsClicked == 0 or buttonsClicked is None:
-            empty_scrolls_attempts = empty_scrolls_attempts - 1
-            scroll()
         sleep(1, 3)
-    logger('{} '.format(
-        heroes_clicked_total)+afkapp_bcbot_48, telegram=heroesClickedTelegram, emoji='🦸')
+
+        logger(afkapp_bcbot_74,
+               telegram=heroesClickedTelegram, emoji='🦸')
+
+    else:
+        while(empty_scrolls_attempts > 0):
+            if streamConfig['select_heroes_mode'] == 'full':
+                buttonsClicked = clickFullBarButtons()
+                if buttonsClicked is not None:
+                    heroes_clicked += buttonsClicked
+            elif streamConfig['select_heroes_mode'] == 'green':
+                buttonsClicked = clickGreenBarButtons()
+                if buttonsClicked is not None:
+                    heroes_clicked += buttonsClicked
+
+            empty_scrolls_attempts -= 1
+
+            scroll()
+
+            sleep(1, 3)
+
+            logger('{} '.format(
+                heroes_clicked_total)+afkapp_bcbot_48, telegram=heroesClickedTelegram, emoji='🦸')
+
     goToTreasureHunt()
+
 
 def checkLogout():
     if currentScreen() == "unknown" or currentScreen() == "login":
@@ -1152,6 +1152,7 @@ def checkUpdates():
                telegram=True, emoji='💥')
         exit()
 
+
 def checkThreshold():
     global configThreshold
     newStream = readConfig()
@@ -1161,8 +1162,9 @@ def checkThreshold():
         configThreshold = newConfigThreshold
         logger(afkapp_bcbot_58, telegram=False, emoji='⚙️')
 
+
 def bcbotsingle():
-    print(Fore.YELLOW +afkapp_bcbot_59, Style.RESET_ALL)
+    print(Fore.YELLOW + afkapp_bcbot_59, Style.RESET_ALL)
     last = {
         "login": 0,
         "heroes": 0,
@@ -1179,12 +1181,12 @@ def bcbotsingle():
 
         now = time.time()
 
-        ps=PauseStatus()
+        ps = PauseStatus()
         if len(ps) == 1:
             logger(afkapp_bcbot_66, telegram=True, emoji='🤖')
             time.sleep(PT*60)
             if len(ps) == 0:
-                logger('Debug of continue', telegram=True, emoji='🤖') #Test
+                logger('Debug of continue', telegram=True, emoji='🤖')  # Test
             if len(ps) == 1:
                 Pause.remove(1)
                 logger(afkapp_bcbot_67, telegram=True, emoji='🤖')
@@ -1221,19 +1223,20 @@ def bcbotsingle():
         time.sleep(1)
         checkThreshold()
 
+
 def bcbotmaw():
-    print(Fore.GREEN +afkapp_bcbot_61, Style.RESET_ALL)
+    print(Fore.GREEN + afkapp_bcbot_61, Style.RESET_ALL)
 
     windows = []
-    
+
     for w in bcbotma.getWindowsWithTitle('bombcrypto'):
         windows.append({
             "window": w,
-            "login" : 0,
-            "heroes" : 0,
-            "new_map" : 0,
-            "refresh_heroes" : 0
-            })
+            "login": 0,
+            "heroes": 0,
+            "new_map": 0,
+            "refresh_heroes": 0
+        })
 
     while True:
         if currentScreen() == "login":
@@ -1242,13 +1245,13 @@ def bcbotmaw():
         handleError()
 
         now = time.time()
-        
-        ps=PauseStatus()
+
+        ps = PauseStatus()
         if len(ps) == 1:
             logger(afkapp_bcbot_66, telegram=True, emoji='🤖')
             time.sleep(PT*60)
             if len(ps) == 0:
-                logger('Debug of continue', telegram=True, emoji='🤖') #Test
+                logger('Debug of continue', telegram=True, emoji='🤖')  # Test
             if len(ps) == 1:
                 Pause.remove(1)
                 logger(afkapp_bcbot_67, telegram=True, emoji='🤖')
@@ -1262,7 +1265,7 @@ def bcbotmaw():
                 last["window"].maximize()
                 last["window"].activate()
             time.sleep(2)
-        
+
             if now - last["heroes"] > next_refresh_heroes * 60:
                 last["heroes"] = now
                 last["refresh_heroes"] = now
@@ -1291,22 +1294,24 @@ def bcbotmaw():
             time.sleep(general_check_time)
             checkThreshold()
 
-def main():
 
+def main():
     checkUpdates()
     #input('Press Enter to start the bot...\n')
     logger('Starting bot...', telegram=True, emoji='🤖')
-    logger(afkapp_bcbot_11+' https://t.me/bombcryptobcbot', telegram=True, emoji='💖')
+    logger(afkapp_bcbot_11+' https://t.me/bombcryptobcbot',
+           telegram=True, emoji='💖')
     logger(afkapp_bcbot_63, telegram=True, emoji='ℹ️')
 
     if multi_account != True and os.name == 'nt':
-        bcbotsingle() 
-    
+        bcbotsingle()
+
     if multi_account == True and os.name == 'nt':
-        bcbotmaw() 
+        bcbotmaw()
 
     if os.name == 'posix':
-        bcbotsingle()  
+        bcbotsingle()
+
 
 if __name__ == '__main__':
     try:
