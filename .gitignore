@@ -8,7 +8,9 @@ __pycache__/
 
 # config file
 /config/config.yaml
-/config/telegram.yaml
+/config/services/telegram.yaml
+/config/services/multiaccount.yaml
+/config/services/btsherald.yaml
 
 # Images
 /images/targets
