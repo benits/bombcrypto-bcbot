@@ -74,6 +74,7 @@ afkapp_bcbot_72: "Recurso não compatível com o seu sistema."
 afkapp_bcbot_73: "Comando para fechar a conexão com o VPS, o bot continua funcionando, também corrige o erro com o PyGetWindow no multi account, GRÁTIS para clientes da BTS IT Solutions: \n\n https://www.btscenter.com.br/vps-linux"
 afkapp_bcbot_74: "Todos os heróis foram enviados para trabalhar"
 afkapp_bcbot_75: "Mapas passados desde que o bot foi iniciado"
-
+afkapp_bcbot_76: "PARABÉNS: Prisão encontrada."
+afkapp_bcbot_77: "Você achou uma chave para o modo aventura."
 # [en] PLEASE DON'T CHANGE
 version: "1.0.0"
